@@ -1,4 +1,5 @@
 name: Publish And Release
+
 on:
   workflow_dispatch:
     inputs:
@@ -13,14 +14,10 @@ on:
         description: 'Target Tag'
         required: true
         default: 'latest'
+
 jobs:
   release:
-    runs-on: ${{ matrix.os }} 
-    strategy:
-      max-parallel: 2
-      matrix:
-        os: [ubuntu-latest]
-        node: [12.x]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -30,7 +27,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: ${{ matrix.node }}
+          node-version: 12
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
         with:
