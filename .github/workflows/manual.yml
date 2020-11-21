@@ -17,3 +17,4 @@ jobs:
     - run: |
         echo "Hello ${{ github.event.inputs.name }}!"
         echo "- in ${{ github.event.inputs.home }}!"
+        echo "repo: ${{ github.repository }}"
