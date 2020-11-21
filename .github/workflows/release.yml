@@ -24,16 +24,16 @@ jobs:
         with:
           repository: ${{ github.event.inputs.git_repository }}
           ref: ${{ github.event.inputs.target_branch }}
-      # - name: Setup Node
-      #   uses: actions/setup-node@v1
-      #   with:
-      #     node-version: 12
-      # - name: Publish
-      #   uses: JS-DevTools/npm-publish@v1
-      #   with:
-      #     token: ${{ secrets.NPM_TOKEN }}
-      #     tag: ${{ github.event.inputs.target_tag }}
-      #     access: "public"
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Publish
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          tag: ${{ github.event.inputs.target_tag }}
+          access: "public"
       # - name: Get Release Note
       #   id: releaseNote
       #   runs:
