@@ -24,28 +24,28 @@ jobs:
         with:
           repository: ${{ github.event.inputs.git_repository }}
           ref: ${{ github.event.inputs.target_branch }}
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12
-      - name: Publish
-        uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          tag: ${{ github.event.inputs.target_tag }}
-          access: "public"
-      - name: Get Release Note
-        id: releaseNote
-        runs:
-          using: "node12"
-          main: "getReleaseNote.js"
-      - name: Create Release Note
-        uses: actions/create-release@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.releaseNote.outputs.version }}
-          release_name: Release ${{ steps.releaseNote.outputs.version }}
-          body: ${{ steps.releaseNote.outputs.body }}
-          draft: false
-          prerelease: false
+      # - name: Setup Node
+      #   uses: actions/setup-node@v1
+      #   with:
+      #     node-version: 12
+      # - name: Publish
+      #   uses: JS-DevTools/npm-publish@v1
+      #   with:
+      #     token: ${{ secrets.NPM_TOKEN }}
+      #     tag: ${{ github.event.inputs.target_tag }}
+      #     access: "public"
+      # - name: Get Release Note
+      #   id: releaseNote
+      #   runs:
+      #     using: "node12"
+      #     main: "getReleaseNote.js"
+      # - name: Create Release Note
+      #   uses: actions/create-release@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: ${{ steps.releaseNote.outputs.version }}
+      #     release_name: Release ${{ steps.releaseNote.outputs.version }}
+      #     body: ${{ steps.releaseNote.outputs.body }}
+      #     draft: false
+      #     prerelease: false
