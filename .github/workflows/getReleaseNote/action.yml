@@ -1,0 +1,10 @@
+name: "Relese Note"
+description: "Create Body for Relese Note"
+runs:
+  using: "node12"
+  main: "index.js"
+outputs:
+  version:
+    description: "Target Version"
+  body:
+    description: "Body for Relese Note"
