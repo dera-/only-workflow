@@ -29,7 +29,8 @@ jobs:
       - name: Check File
         run: |
           pwd
-          find . -name action.yml
+          ls -la
+          find / -name action.yml
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
