@@ -26,6 +26,10 @@ jobs:
         with:
           repository: ${{ github.event.inputs.git_repository }}
           ref: ${{ github.event.inputs.target_branch }}
+      - name: Check File
+        run: |
+          pwd
+          find . -name action.yml
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
