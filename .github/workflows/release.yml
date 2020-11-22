@@ -34,22 +34,17 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
           tag: ${{ github.event.inputs.target_tag }}
           access: "public"
-      # - name: Get Release Note
-      #   id: releaseNote
-      #   runs:
-      #     using: "node12"
-      #     main: "getReleaseNote.js"
-      # - name: Output Check
-      #   run: |
-      #     echo "version ${{ steps.releaseNote.outputs.version }}"
-      #     echo "body ${{ steps.releaseNote.outputs.body }}"
+      - name: Get Release Note
+        id: releaseNote
+        uses: ./getReleaseNote.js
       - name: Create Release Note
         uses: actions/create-release@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "v0.2.8"
-          release_name: "v0.2.8"
-          body: "test"
+          tag_name: v${{ steps.releaseNote.outputs.version }}
+          release_name: Release v${{ steps.releaseNote.outputs.version }}
+          body: ${{ steps.releaseNote.outputs.body }}
           draft: false
           prerelease: false
+          repo: ${{ github.event.inputs.git_repository }}
