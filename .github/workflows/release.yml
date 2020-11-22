@@ -39,13 +39,17 @@ jobs:
         runs:
           using: "node12"
           main: "getReleaseNote.js"
-      - name: Create Release Note
-        uses: actions/create-release@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.releaseNote.outputs.version }}
-          release_name: Release ${{ steps.releaseNote.outputs.version }}
-          body: ${{ steps.releaseNote.outputs.body }}
-          draft: false
-          prerelease: false
+      - name: Output Check
+        run: |
+          echo "version ${{ steps.releaseNote.outputs.version }}"
+          echo "body ${{ steps.releaseNote.outputs.body }}"
+      # - name: Create Release Note
+      #   uses: actions/create-release@master
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     tag_name: ${{ steps.releaseNote.outputs.version }}
+      #     release_name: Release ${{ steps.releaseNote.outputs.version }}
+      #     body: ${{ steps.releaseNote.outputs.body }}
+      #     draft: false
+      #     prerelease: false
