@@ -10,13 +10,15 @@ try {
 		const changelog = fs.readFileSync("./CHANGELOG.md");
 		const changelogArray = changelog.split("\n");
 		let matchCount = 0;
-		const regex = /## \d+\.\d+\.[\d\w_\-\.]+/;
+		const regex = /## (\d+\.\d+\.[\d\w_\-\.]+)/;
 		for (let i = 0; i < changelogArray.length; i++) {
-			if ( changelogArray[i].match(regex)) {
+			const match = changelogArray[i].match(regex);
+			if (match) {
 				if (matchCount > 0) {
 					break;
+				} else if (match[1] === version) {
+					matchCount++;
 				}
-				matchCount++;
 			} else if (matchCount > 0) {
 				body += changelogArray[i] + "\n";
 			}

@@ -34,18 +34,18 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
           tag: ${{ github.event.inputs.target_tag }}
           access: "public"
-      # - name: Get Release Note
-      #   id: releaseNote
-      #   runs:
-      #     using: "node12"
-      #     main: "getReleaseNote.js"
-      # - name: Create Release Note
-      #   uses: actions/create-release@master
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: ${{ steps.releaseNote.outputs.version }}
-      #     release_name: Release ${{ steps.releaseNote.outputs.version }}
-      #     body: ${{ steps.releaseNote.outputs.body }}
-      #     draft: false
-      #     prerelease: false
+      - name: Get Release Note
+        id: releaseNote
+        runs:
+          using: "node12"
+          main: "getReleaseNote.js"
+      - name: Create Release Note
+        uses: actions/create-release@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.releaseNote.outputs.version }}
+          release_name: Release ${{ steps.releaseNote.outputs.version }}
+          body: ${{ steps.releaseNote.outputs.body }}
+          draft: false
+          prerelease: false
