@@ -36,7 +36,7 @@ jobs:
           access: "public"
       - name: Get Release Note
         id: releaseNote
-        uses: ./getReleaseNote.js
+        uses: ./getReleaseNote
       - name: Create Release Note
         uses: actions/create-release@master
         env:
