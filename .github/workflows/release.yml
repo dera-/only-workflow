@@ -51,7 +51,7 @@ jobs:
       - name: Create Release Note
         uses: actions/create-release@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
           tag_name: v${{ steps.releaseNote.outputs.version }}
           release_name: Release v${{ steps.releaseNote.outputs.version }}
