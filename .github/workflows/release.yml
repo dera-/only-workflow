@@ -45,6 +45,7 @@ jobs:
           package: "./target/package.json"
           tag: ${{ github.event.inputs.target_tag }}
           access: "public"
+      - run: ls -la target 
       - name: Get Release Note
         id: releaseNote
         uses: ./getReleaseNote
