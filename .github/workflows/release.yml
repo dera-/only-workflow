@@ -47,7 +47,7 @@ jobs:
           access: "public"
       - name: Get Release Note
         id: releaseNote
-        uses: ./workflow/getReleaseNote
+        uses: ./getReleaseNote
       - name: Create Release Note
         uses: actions/create-release@master
         env:
