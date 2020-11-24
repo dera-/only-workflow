@@ -2,12 +2,12 @@ const core = require("@actions/core");
 const fs = require("fs");
 
 try {
-	const packageJson = require("./package.json");
+	const packageJson = require("../target/package.json");
 	const version = packageJson["version"];
 	core.setOutput("version", version);
 	let body = "";
-	if (fs.existsSync("./CHANGELOG.md")) {
-		const changelog = fs.readFileSync("./CHANGELOG.md");
+	if (fs.existsSync("../target/CHANGELOG.md")) {
+		const changelog = fs.readFileSync("../target/CHANGELOG.md");
 		const changelogArray = changelog.split("\n");
 		let matchCount = 0;
 		const regex = /## (\d+\.\d+\.[\d\w_\-\.]+)/;
