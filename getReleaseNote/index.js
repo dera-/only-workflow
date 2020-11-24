@@ -8,7 +8,7 @@ try {
 	core.setOutput("version", version);
 	let body = "";
 	//if (fs.existsSync("../target/CHANGELOG.md")) {
-		const changelog = fs.readFileSync(__dirname + "../target/CHANGELOG.md");
+		const changelog = fs.readFileSync(__dirname + "/../target/CHANGELOG.md");
 		const changelogArray = changelog.split("\n");
 		let matchCount = 0;
 		const regex = /## (\d+\.\d+\..+)/;
