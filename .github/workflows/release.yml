@@ -19,18 +19,16 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout This Repository
-        uses: actions/checkout@v2
       - name: Checkout Target Repository
         uses: actions/checkout@v2
         with:
           repository: ${{ github.event.inputs.git_repository }}
           ref: ${{ github.event.inputs.target_branch }}
-      - name: Check File
-        run: |
-          pwd
-          ls -la
-          find / -name action.yml
+      # - name: Check File
+      #   run: |
+      #     pwd
+      #     ls -la
+      #     find / -name action.yml
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
@@ -41,9 +39,13 @@ jobs:
           token: ${{ secrets.NPM_TOKEN }}
           tag: ${{ github.event.inputs.target_tag }}
           access: "public"
+      - name: Checkout This Repository
+        uses: actions/checkout@v2
+        with:
+          path: workflow
       - name: Get Release Note
         id: releaseNote
-        uses: ./getReleaseNote
+        uses: ./workflow/getReleaseNote
       - name: Create Release Note
         uses: actions/create-release@master
         env:
