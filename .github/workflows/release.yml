@@ -58,10 +58,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
-          tag_name: "v0.2.12"
-          release_name: "Release v0.2.12"
+          tag_name: "${{ steps.releaseNote.outputs.version }}"
+          release_name: "Release ${{ steps.releaseNote.outputs.version }}"
           body: ${{ steps.releaseNote.outputs.body }}
           draft: false
           prerelease: false
+          commitish: ${{ github.event.inputs.target_branch }}
           owner: dera-
           repo: ${{ github.event.inputs.git_repository }}
