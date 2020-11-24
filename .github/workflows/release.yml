@@ -49,9 +49,9 @@ jobs:
         id: releaseNote
         uses: ./getReleaseNote
       - name: Check Output
-          run: |
-            echo "${{ steps.releaseNote.outputs.version }}"
-            echo "{{ steps.releaseNote.outputs.body }}"
+        run: |
+          echo "${{ steps.releaseNote.outputs.version }}"
+          echo "{{ steps.releaseNote.outputs.body }}"
       - name: Create Release Note
         uses: actions/create-release@master
         env:
