@@ -19,11 +19,14 @@ jobs:
   release:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout This Repository
+        uses: actions/checkout@v2
       - name: Checkout Target Repository
         uses: actions/checkout@v2
         with:
           repository: ${{ github.event.inputs.git_repository }}
           ref: ${{ github.event.inputs.target_branch }}
+          path: target
       # - name: Check File
       #   run: |
       #     pwd
@@ -33,31 +36,15 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: 12
-      - name: Cache node modules
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-node-modules
-        with:
-          path: ~/.npm
-          key: ${{ env.cache-version }}-${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ env.cache-version }}-${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ env.cache-version }}-${{ runner.os }}-build-
-            ${{ env.cache-version }}-${{ runner.os }}-
+      - name: Npm Install
+        run: npm install
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
+          package: "./target/package.json"
           tag: ${{ github.event.inputs.target_tag }}
           access: "public"
-      - name: Checkout This Repository
-        uses: actions/checkout@v2
-        with:
-          path: workflow
-      - name: Npm Install
-        run: |
-          cd workflow
-          npm install
       - name: Get Release Note
         id: releaseNote
         uses: ./workflow/getReleaseNote
