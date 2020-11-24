@@ -24,7 +24,7 @@ jobs:
       - name: Checkout Target Repository
         uses: actions/checkout@v2
         with:
-          repository: ${{ github.event.inputs.git_repository }}
+          repository: dera-/${{ github.event.inputs.git_repository }}
           ref: ${{ github.event.inputs.target_branch }}
           path: target
       # - name: Check File
@@ -58,4 +58,5 @@ jobs:
           body: ${{ steps.releaseNote.outputs.body }}
           draft: false
           prerelease: false
+          owner: dera-
           repo: ${{ github.event.inputs.git_repository }}
