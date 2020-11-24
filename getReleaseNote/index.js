@@ -4,6 +4,7 @@ const fs = require("fs");
 try {
 	const packageJson = require("../target/package.json");
 	const version = packageJson["version"];
+	console.log("version", version);
 	core.setOutput("version", version);
 	let body = "";
 	if (fs.existsSync("../target/CHANGELOG.md")) {
@@ -24,6 +25,7 @@ try {
 			}
 		}
 	}
+	console.log("body", body);
 	core.setOutput("body", body);
 } catch (error) {
 	core.setFailed(error.message);
