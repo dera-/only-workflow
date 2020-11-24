@@ -7,11 +7,11 @@ try {
 	console.log("version", version);
 	core.setOutput("version", version);
 	let body = "";
-	if (fs.existsSync("../target/CHANGELOG.md")) {
+	//if (fs.existsSync("../target/CHANGELOG.md")) {
 		const changelog = fs.readFileSync("../target/CHANGELOG.md");
 		const changelogArray = changelog.split("\n");
 		let matchCount = 0;
-		const regex = /## (\d+\.\d+\.[\d\w_\-\.]+)/;
+		const regex = /## (\d+\.\d+\..+)/;
 		for (let i = 0; i < changelogArray.length; i++) {
 			const match = changelogArray[i].match(regex);
 			if (match) {
@@ -24,7 +24,7 @@ try {
 				body += changelogArray[i] + "\n";
 			}
 		}
-	}
+	//}
 	console.log("body", body);
 	core.setOutput("body", body);
 } catch (error) {
