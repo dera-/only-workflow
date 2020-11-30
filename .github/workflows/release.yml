@@ -4,62 +4,60 @@ on:
   workflow_dispatch:
     inputs:
       git_repository:
-        description: 'Git Repository'
+        description: Git Repository
         required: true
       target_branch:
-        description: 'Target Branch'
+        description: Target Branch
         required: true
-        default: 'master'
+        default: master
       target_tag:
-        description: 'Target Tag'
+        description: Target Tag
         required: true
-        default: 'latest'
+        default: latest
 
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      NODE_VERSION: 12
     steps:
       - name: Checkout This Repository
         uses: actions/checkout@v2
+        with:
+          # TODO: これで動くか要確認
+          path: workflows
       - name: Checkout Target Repository
         uses: actions/checkout@v2
         with:
           repository: dera-/${{ github.event.inputs.git_repository }}
           ref: ${{ github.event.inputs.target_branch }}
           path: target
-      # - name: Check File
-      #   run: |
-      #     pwd
-      #     ls -la
-      #     find / -name action.yml
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: 12
-      - name: Npm Install
-        run: npm install
+          # TODO: これで動くか要確認
+          node-version: ${{ env.NODE_VERSION }}
+      - run: |
+        cd workflows
+        npm install
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          package: "./target/package.json"
+          package: ./target/package.json
           tag: ${{ github.event.inputs.target_tag }}
-          access: "public"
-      - run: ls -la target 
+          access: public
       - name: Get Release Note
         id: releaseNote
-        uses: ./getReleaseNote
-      - name: Check Output
-        run: |
-          echo "${{ steps.releaseNote.outputs.version }}"
-          echo "${{ steps.releaseNote.outputs.body }}"
+        uses: ./workflows/generateReleaseNote
       - name: Create Release Note
         uses: actions/create-release@master
         env:
+          # 他リポジトリに対して操作を行う場合secret.GITHUB_TOKENとは別にgithubトークンを利用する必要があるためsecret.GH_TOKENを用意
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
-          tag_name: "${{ steps.releaseNote.outputs.version }}"
-          release_name: "Release ${{ steps.releaseNote.outputs.version }}"
+          tag_name: ${{ steps.releaseNote.outputs.version }}
+          release_name: Release ${{ steps.releaseNote.outputs.version }}
           body: ${{ steps.releaseNote.outputs.body }}
           draft: false
           prerelease: false
