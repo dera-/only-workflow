@@ -44,9 +44,9 @@ jobs:
           package: ./target/package.json
           tag: ${{ github.event.inputs.target_tag }}
           access: public
-      - name: Get Release Note
-        id: releaseNote
-        uses: ./workflows/generateReleaseNote
+      # - name: Get Release Note
+      #   id: releaseNote
+      #   uses: ./workflows/generateReleaseNote
       # - name: Create Release Note
         # uses: actions/create-release@master
         # env:
