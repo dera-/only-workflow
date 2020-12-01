@@ -37,16 +37,16 @@ jobs:
       - run: |
         cd workflows
         npm install
-      # - name: Publish
-      #   uses: JS-DevTools/npm-publish@v1
-      #   with:
-      #     token: ${{ secrets.NPM_TOKEN }}
-      #     package: ./target/package.json
-      #     tag: ${{ github.event.inputs.target_tag }}
-      #     access: public
-      # - name: Get Release Note
-      #   id: releaseNote
-      #   uses: ./workflows/generateReleaseNote
+      - name: Publish
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./target/package.json
+          tag: ${{ github.event.inputs.target_tag }}
+          access: public
+      - name: Get Release Note
+        id: releaseNote
+        uses: ./workflows/generateReleaseNote
       # - name: Create Release Note
         # uses: actions/create-release@master
         # env:
