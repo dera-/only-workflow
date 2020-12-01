@@ -34,6 +34,8 @@ jobs:
         with:
           # TODO: envにする
           node-version: 12
+      # 確認用
+      - run: ls -la
       - run: cd workflows && npm install
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
