@@ -41,7 +41,7 @@ jobs:
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ secrets.NPM_TOKEN }}
-          package: ./target/package.json
+          package: "./target/package.json"
           tag: ${{ github.event.inputs.target_tag }}
           access: public
       # - name: Get Release Note
