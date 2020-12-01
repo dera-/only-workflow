@@ -29,11 +29,11 @@ jobs:
           repository: dera-/${{ github.event.inputs.git_repository }}
           ref: ${{ github.event.inputs.target_branch }}
           path: target
-      # - name: Setup Node
-      #   uses: actions/setup-node@v1
-      #   with:
-      #     # TODO: envにする
-      #     node-version: 12
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          # TODO: envにする
+          node-version: 12
       # - run: |
       #   cd workflows
       #   npm install
