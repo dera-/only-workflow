@@ -34,9 +34,9 @@ jobs:
         with:
           # TODO: envにする
           node-version: 12
-      # - run: |
-      #   cd workflows
-      #   npm install
+      - run: |
+        cd workflows
+        npm install
       # - name: Publish
       #   uses: JS-DevTools/npm-publish@v1
       #   with:
@@ -48,16 +48,16 @@ jobs:
       #   id: releaseNote
       #   uses: ./workflows/generateReleaseNote
       # - name: Create Release Note
-        uses: actions/create-release@master
-        env:
-          # 他リポジトリに対して操作を行う場合secret.GITHUB_TOKENとは別にgithubトークンを利用する必要があるためsecret.GH_TOKENを用意
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-        with:
-          tag_name: ${{ steps.releaseNote.outputs.version }}
-          release_name: Release ${{ steps.releaseNote.outputs.version }}
-          body: ${{ steps.releaseNote.outputs.body }}
-          draft: false
-          prerelease: false
-          commitish: ${{ github.event.inputs.target_branch }}
-          owner: dera-
-          repo: ${{ github.event.inputs.git_repository }}
+        # uses: actions/create-release@master
+        # env:
+        #   # 他リポジトリに対して操作を行う場合secret.GITHUB_TOKENとは別にgithubトークンを利用する必要があるためsecret.GH_TOKENを用意
+        #   GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        # with:
+        #   tag_name: ${{ steps.releaseNote.outputs.version }}
+        #   release_name: Release ${{ steps.releaseNote.outputs.version }}
+        #   body: ${{ steps.releaseNote.outputs.body }}
+        #   draft: false
+        #   prerelease: false
+        #   commitish: ${{ github.event.inputs.target_branch }}
+        #   owner: dera-
+        #   repo: ${{ github.event.inputs.git_repository }}
