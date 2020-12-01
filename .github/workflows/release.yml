@@ -29,25 +29,25 @@ jobs:
           repository: dera-/${{ github.event.inputs.git_repository }}
           ref: ${{ github.event.inputs.target_branch }}
           path: target
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          # TODO: envにする
-          node-version: 12
-      - run: |
-        cd workflows
-        npm install
-      - name: Publish
-        uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          package: ./target/package.json
-          tag: ${{ github.event.inputs.target_tag }}
-          access: public
-      - name: Get Release Note
-        id: releaseNote
-        uses: ./workflows/generateReleaseNote
-      - name: Create Release Note
+      # - name: Setup Node
+      #   uses: actions/setup-node@v1
+      #   with:
+      #     # TODO: envにする
+      #     node-version: 12
+      # - run: |
+      #   cd workflows
+      #   npm install
+      # - name: Publish
+      #   uses: JS-DevTools/npm-publish@v1
+      #   with:
+      #     token: ${{ secrets.NPM_TOKEN }}
+      #     package: ./target/package.json
+      #     tag: ${{ github.event.inputs.target_tag }}
+      #     access: public
+      # - name: Get Release Note
+      #   id: releaseNote
+      #   uses: ./workflows/generateReleaseNote
+      # - name: Create Release Note
         uses: actions/create-release@master
         env:
           # 他リポジトリに対して操作を行う場合secret.GITHUB_TOKENとは別にgithubトークンを利用する必要があるためsecret.GH_TOKENを用意
