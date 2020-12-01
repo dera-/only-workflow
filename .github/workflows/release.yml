@@ -18,6 +18,8 @@ on:
 jobs:
   release:
     runs-on: ubuntu-latest
+    env:
+      NODE_VERSION: 12
     steps:
       - name: Checkout This Repository
         uses: actions/checkout@v2
@@ -32,8 +34,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          # TODO: envにする
-          node-version: 12
+          node-version: ${{ env.NODE_VERSION }}
       - run: cd workflows && npm install
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
