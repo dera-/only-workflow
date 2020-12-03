@@ -47,7 +47,7 @@ jobs:
         id: releaseNote
         uses: ./workflows/generateReleaseNote
         with:
-          repositoryPath: ${{ GITHUB_WORKSPACE }}/target
+          repositoryPath: $GITHUB_WORKSPACE/target
       - name: Create Release Note
         uses: actions/create-release@master
         env:
