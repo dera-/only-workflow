@@ -21,6 +21,8 @@ jobs:
     env:
       NODE_VERSION: 12
     steps:
+      - name: Set Env
+        run: echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE" >> $GITHUB_ENV
       - name: Checkout This Repository
         uses: actions/checkout@v2
         with:
@@ -43,12 +45,6 @@ jobs:
           package: ./target/package.json
           tag: ${{ github.event.inputs.target_tag }}
           access: public
-      - name: Echo Only
-        run: |
-          echo $GITHUB_REPOSITORY
-          echo $GITHUB_WORKSPACE
-      - name: Set env
-        run: echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE" >> $GITHUB_ENV
       - name: Get Release Note
         id: releaseNote
         uses: ./workflows/generateReleaseNote
