@@ -1,10 +1,14 @@
-name: "Relese Note"
-description: "Create Body for Relese Note"
+name: Genearete Release Note
+description: Genearete Release Note from CHANGELOG.md
+inputs:
+  repositoryPath:
+    description: Path of published repository
+    required: true
 runs:
-  using: "node12"
-  main: "index.js"
+  using: node12
+  main: index.js
 outputs:
   version:
-    description: "Target Version"
+    description: Target Version
   body:
-    description: "Body for Relese Note"
+    description: Body for Relese Note

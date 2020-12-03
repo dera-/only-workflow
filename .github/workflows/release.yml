@@ -46,6 +46,8 @@ jobs:
       - name: Get Release Note
         id: releaseNote
         uses: ./workflows/generateReleaseNote
+        with:
+          repositoryPath: ./target
       - name: Create Release Note
         uses: actions/create-release@master
         env:

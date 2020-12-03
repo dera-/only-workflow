@@ -1,14 +1,17 @@
 const core = require("@actions/core");
 const fs = require("fs");
+const path = require("path");
 
 try {
-	const packageJson = require("../../target/package.json");
+	const repositoryPath = core.getInput("repositoryPath");
+	const packageJson = require(path.join(repositoryPath, "package.json"));
 	const version = packageJson["version"];
 	console.log("version", version);
 	core.setOutput("version", "v" + version);
 	let body = "";
-	if (fs.existsSync(__dirname + "/../../target/CHANGELOG.md")) {
-		const changelog = fs.readFileSync(__dirname + "/../../target/CHANGELOG.md").toString();
+	const changelogPath = path.join(repositoryPath, "CHANGELOG.md");
+	if (fs.existsSync(changelogPath)) {
+		const changelog = fs.readFileSync(changelogPath).toString();
 		const changelogArray = changelog.split("\n");
 		let matchCount = 0;
 		const regex = /## (\d+\.\d+\..+)/;
