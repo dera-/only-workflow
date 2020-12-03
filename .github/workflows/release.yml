@@ -36,9 +36,8 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - run:
-          shell: npm install
-          working-directory: workflows
+      - run: npm install
+        working-directory: workflows
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
         with:
