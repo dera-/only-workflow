@@ -5,7 +5,8 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run test:generate-release-note",
+    "test:generate-release-note": "node ./generateReleaseNote/generateReleaseNote.test.js"
   },
   "repository": {
     "type": "git",

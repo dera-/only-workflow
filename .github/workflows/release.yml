@@ -4,40 +4,41 @@ on:
   workflow_dispatch:
     inputs:
       git_repository:
-        description: Git Repository
+        description: Git repository
         required: true
       target_branch:
-        description: Target Branch
+        description: Target branch
         required: true
         default: master
       target_tag:
-        description: Target Tag
+        description: Target tag
         required: true
         default: latest
+
+env:
+  NODE_VERSION: 12
 
 jobs:
   release:
     runs-on: ubuntu-latest
-    env:
-      NODE_VERSION: 12
     steps:
-      - name: Set Env
-        run: echo "GITHUB_WORKSPACE=$GITHUB_WORKSPACE" >> $GITHUB_ENV
-      - name: Checkout This Repository
+      - name: Checkout this repository
         uses: actions/checkout@v2
         with:
           path: workflows
-      - name: Checkout Target Repository
+      - name: Checkout target repository
         uses: actions/checkout@v2
         with:
           repository: dera-/${{ github.event.inputs.git_repository }}
           ref: ${{ github.event.inputs.target_branch }}
           path: target
-      - name: Setup Node
+      - name: Setup node
         uses: actions/setup-node@v1
         with:
           node-version: ${{ env.NODE_VERSION }}
-      - run: cd workflows && npm install
+      - run:
+          shell: npm install
+          working-directory: workflows
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
         with:
@@ -45,20 +46,20 @@ jobs:
           package: ./target/package.json
           tag: ${{ github.event.inputs.target_tag }}
           access: public
-      - name: Get Release Note
-        id: releaseNote
+      - name: Generate release note
+        id: release_note
         uses: ./workflows/generateReleaseNote
         with:
-          repositoryPath: ${{ env.GITHUB_WORKSPACE }}/target
-      - name: Create Release Note
+          repository_path: ${{ github.workspace }}/target
+      - name: Create release note
         uses: actions/create-release@master
         env:
           # 他リポジトリに対して操作を行う場合secret.GITHUB_TOKENとは別にgithubトークンを利用する必要があるためsecret.GH_TOKENを用意
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
-          tag_name: ${{ steps.releaseNote.outputs.version }}
-          release_name: Release ${{ steps.releaseNote.outputs.version }}
-          body: ${{ steps.releaseNote.outputs.body }}
+          tag_name: ${{ steps.release_note.outputs.version }}
+          release_name: Release ${{ steps.release_note.outputs.version }}
+          body: ${{ steps.release_note.outputs.body }}
           draft: false
           prerelease: false
           commitish: ${{ github.event.inputs.target_branch }}
