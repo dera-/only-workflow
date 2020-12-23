@@ -41,11 +41,11 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - run: npm install
         working-directory: workflows
-      - name: Run test in target repository
-        run: |
-          npm install
-          npm test
-        working-directory: target
+      # - name: Run test in target repository
+      #   run: |
+      #     npm install
+      #     npm test
+      #   working-directory: target
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
         with:
