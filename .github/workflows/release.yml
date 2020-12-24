@@ -60,6 +60,8 @@ jobs:
       - name: Add dist tag
         if: ${{ github.event.inputs.additional_tag }}
         run: npm dist-tag add ${{ fromJson(steps.package_json.outputs.content).name }}@${{ fromJson(steps.package_json.outputs.content).version }} ${{ github.event.inputs.additional_tag }}
+        env:
+          INPUT_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Generate release note
         id: release_note
         uses: ./workflows/generateReleaseNote
