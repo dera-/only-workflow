@@ -50,6 +50,10 @@ jobs:
         id: changed_modules
         run: echo "::set-output name=count::$(./node_modules/.bin/lerna changed | wc -l | tr -d '\n')"
         working-directory: target
+      - name: check valiables
+        run: |
+          echo ${{ github.event.inputs.next_version }}
+          echo ${{ steps.changed_modules.outputs.count }}
       - name: Stop to publish 
         if: github.event.inputs.next_version != 'from-package' && github.event.inputs.next_version != 'force-patch-all' && steps.changed_modules.outputs.count == '0'
         run: exit 0
