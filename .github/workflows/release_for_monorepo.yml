@@ -69,6 +69,8 @@ jobs:
           set -x
       - name: Publish
         run: |
+          git config user.name "dera-"
+          git config user.email "alchemy.and.fairy@gmail.com"
           if [[ ${{ github.event.inputs.next_version }} = "from-package" ]]; then
             ./node_modules/.bin/lerna publish from-package --yes
           else
