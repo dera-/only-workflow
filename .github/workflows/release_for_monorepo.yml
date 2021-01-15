@@ -1,0 +1,79 @@
+name: Release For Monorepo
+
+on:
+  workflow_dispatch:
+    inputs:
+      git_repository:
+        description: Git repository of Monorepo
+        required: true
+      next_version:
+        description: patch, minor, major, prelease
+        required: true
+      target_branch:
+        description: Target branch
+        required: true
+        default: master
+      publish_dist_tag:
+        description: Target tag
+        required: true
+        default: latest
+
+env:
+  NODE_VERSION: 12
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v2
+        with:
+          path: workflows
+      - name: Checkout target repository
+        uses: actions/checkout@v2
+        with:
+          repository: dera-/${{ github.event.inputs.git_repository }}
+          ref: ${{ github.event.inputs.target_branch }}
+          path: target
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm install
+        working-directory: workflows
+      - name: Npm Install
+        run: |
+          npm install --no-package-lock
+          git checkout .
+        working-directory: target
+      - name: Get changed modlues
+        id: changed_modules
+        run: echo "::set-output name=count::$(./node_modules/.bin/lerna changed | wc -l | tr -d '\n')"
+        working-directory: target
+      - name: Stop to publish 
+        if: ${{ github.event.inputs.next_version != "from-package" && github.event.inputs.next_version != "force-patch-all" && steps.changed_modules.outputs.count == "0" }}
+        run: exit 0
+      - name: Read package.json
+        id: package_json
+        run: echo "::set-output name=content::$(cat ./package.json | tr -d '\n')"
+        working-directory: target
+      - name: Get Token
+        id: npm_token
+        run: |
+          set +x
+          if [[ ${{ fromJson(steps.package_json.outputs.content).name }} =~ @akashic-extension/.+ ]]; then
+            echo "::set-output name=value::${{ secrets.EXTENSION_NPM_TOKEN }}"
+          else
+            echo "::set-output name=value::${{ secrets.NPM_TOKEN }}"
+          fi
+          set -x
+      - name: Publish
+        run: |
+          if [[ ${{ github.event.inputs.next_version }} = "from-package" ]]; then
+            ./node_modules/.bin/lerna publish from-package --yes
+          else
+            npm run publish:${{ github.event.inputs.next_version }}
+          fi
+        env:
+          NPM_TOKEN: ${{ steps.npm_token.outputs.value }}
+        working-directory: target
