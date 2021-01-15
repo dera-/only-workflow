@@ -57,7 +57,7 @@ jobs:
         id: package_json
         run: echo "::set-output name=content::$(cat ./package.json | tr -d '\n')"
         working-directory: target
-      - name: Get Token
+      - name: Get npm token
         id: npm_token
         run: |
           set +x
@@ -76,4 +76,5 @@ jobs:
           fi
         env:
           NPM_TOKEN: ${{ steps.npm_token.outputs.value }}
+          GITHUB_AUTH: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         working-directory: target
