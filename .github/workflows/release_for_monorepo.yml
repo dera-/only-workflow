@@ -52,8 +52,12 @@ jobs:
         working-directory: target
       - name: check valiables
         run: |
+          ./node_modules/.bin/lerna list
+          ./node_modules/.bin/lerna diff
+          ./node_modules/.bin/lerna changed
           echo ${{ github.event.inputs.next_version }}
           echo ${{ steps.changed_modules.outputs.count }}
+        working-directory: target
       - name: Stop to publish 
         if: github.event.inputs.next_version != 'from-package' && github.event.inputs.next_version != 'force-patch-all' && steps.changed_modules.outputs.count == '0'
         run: exit 0
