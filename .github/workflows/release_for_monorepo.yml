@@ -86,6 +86,7 @@ jobs:
           fi
         env:
           NPM_TOKEN: ${{ steps.npm_token.outputs.value }}
+          NPM_AUTH_TOKEN: ${{ steps.npm_token.outputs.value }}
           GITHUB_AUTH: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         working-directory: target
