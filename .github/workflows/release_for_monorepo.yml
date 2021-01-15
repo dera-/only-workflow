@@ -87,5 +87,5 @@ jobs:
         env:
           NPM_TOKEN: ${{ steps.npm_token.outputs.value }}
           GITHUB_AUTH: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         working-directory: target
