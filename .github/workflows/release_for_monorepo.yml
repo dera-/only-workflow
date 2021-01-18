@@ -76,9 +76,12 @@ jobs:
             echo "::set-output name=value::${{ secrets.NPM_TOKEN }}"
           fi
           set -x
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v1
+        with:
+          key: ${{ secrets.REPOSITORY_DEPLOY_KEY }}
       - name: Push(Test)
         run: |
-          echo "$REPOSITORY_DEPLOY_KEY" > ~/deploy_key.pem
           git config user.name "dera-"
           git config user.email "alchemy.and.fairy@gmail.com"
           git remote set-url origin git@github.com:${{ github.actor }}/${{ github.event.inputs.git_repository }}.git
@@ -86,8 +89,6 @@ jobs:
           git add test.txt
           git commit -m "add test.txt"
           git push origin master
-        env:
-          REPOSITORY_DEPLOY_KEY: ${{ secrets.REPOSITORY_DEPLOY_KEY }}
         working-directory: target
 
       # - name: Publish
