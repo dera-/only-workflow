@@ -78,13 +78,16 @@ jobs:
           set -x
       - name: Push(Test)
         run: |
+          echo "$REPOSITORY_DEPLOY_KEY" > ~/deploy_key.pem
           git config user.name "dera-"
           git config user.email "alchemy.and.fairy@gmail.com"
-          git remote set-url origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.actor }}/${{ github.event.inputs.git_repository }}.git
+          git remote set-url origin git@github.com:${{ github.actor }}/${{ github.event.inputs.git_repository }}.git
           touch test.txt
           git add test.txt
           git commit -m "add test.txt"
           git push origin master
+        env:
+          REPOSITORY_DEPLOY_KEY: ${{ secrets.REPOSITORY_DEPLOY_KEY }}
         working-directory: target
 
       # - name: Publish
