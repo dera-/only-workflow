@@ -85,7 +85,7 @@ jobs:
           git config user.name "dera-"
           git config user.email "alchemy.and.fairy@gmail.com"
           git remote set-url origin git@github.com:${{ github.actor }}/${{ github.event.inputs.git_repository }}.git
-          echo //registry.npmjs.org/:_authToken=$NPM_TOKEN >> ./.npmrc
+          npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
           if [[ ${{ github.event.inputs.next_version }} = "from-package" ]]; then
             ./node_modules/.bin/lerna publish from-package --yes
           else
