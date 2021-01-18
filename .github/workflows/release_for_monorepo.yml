@@ -80,18 +80,20 @@ jobs:
         uses: shimataro/ssh-key-action@v1
         with:
           private-key: ${{ secrets.REPOSITORY_DEPLOY_KEY }}
+      - name: Npm token
+        run: npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
+        env:
+          NPM_TOKEN: ${{ steps.npm_token.outputs.value }}
       - name: Publish
         run: |
           git config user.name "dera-"
           git config user.email "alchemy.and.fairy@gmail.com"
           git remote set-url origin git@github.com:${{ github.actor }}/${{ github.event.inputs.git_repository }}.git
-          npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
           if [[ ${{ github.event.inputs.next_version }} = "from-package" ]]; then
             ./node_modules/.bin/lerna publish from-package --yes
           else
             npm run publish:${{ github.event.inputs.next_version }}
           fi
         env:
-          NPM_TOKEN: ${{ steps.npm_token.outputs.value }}
           GITHUB_AUTH: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         working-directory: target
