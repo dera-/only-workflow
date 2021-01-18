@@ -80,7 +80,7 @@ jobs:
         run: |
           git config user.name "dera-"
           git config user.email "alchemy.and.fairy@gmail.com"
-          git remote set-url origin https://dera-@github.com/dera-/lerna_test.git
+          git remote set-url origin git@github.com:dera-/lerna_test.git
           if [[ ${{ github.event.inputs.next_version }} = "from-package" ]]; then
             ./node_modules/.bin/lerna publish from-package --yes
           else
@@ -88,6 +88,7 @@ jobs:
           fi
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ steps.npm_token.outputs.value }}
           GITHUB_AUTH: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         working-directory: target
