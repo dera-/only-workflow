@@ -32,7 +32,7 @@ jobs:
       - name: Checkout target repository
         uses: actions/checkout@v2
         with:
-          repository: dera-/${{ github.event.inputs.git_repository }}
+          repository: ${{ github.actor }}/${{ github.event.inputs.git_repository }}
           ref: ${{ github.event.inputs.target_branch }}
           path: target
       - name: Setup node
@@ -80,12 +80,11 @@ jobs:
         run: |
           git config user.name "dera-"
           git config user.email "alchemy.and.fairy@gmail.com"
+          git remote set-url origin https://${{ github.actor }}:${{ secrets.PERSONAL_ACCESS_TOKEN }}@github.com/${{ github.actor }}/${{ github.event.inputs.git_repository }}
           touch test.txt
           git add test.txt
           git commit -m "add test.txt"
           git push origin master
-        env:
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         working-directory: target
 
       # - name: Publish
