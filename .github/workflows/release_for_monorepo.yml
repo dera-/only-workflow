@@ -79,7 +79,7 @@ jobs:
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v1
         with:
-          key: ${{ secrets.REPOSITORY_DEPLOY_KEY }}
+          private-key: ${{ secrets.REPOSITORY_DEPLOY_KEY }}
       - name: Push(Test)
         run: |
           git config user.name "dera-"
