@@ -76,7 +76,7 @@ jobs:
             echo "::set-output name=value::${{ secrets.NPM_TOKEN }}"
           fi
           set -x
-      -name: Push(Test)
+      - name: Push(Test)
         run: |
           touch test.txt
           git add test.txt
