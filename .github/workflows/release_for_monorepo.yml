@@ -101,6 +101,6 @@ jobs:
             npm run publish:${{ github.event.inputs.next_version }}
           fi
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN2 }}
           GITHUB_AUTH: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         working-directory: target
