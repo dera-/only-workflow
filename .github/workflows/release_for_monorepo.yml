@@ -49,6 +49,8 @@ jobs:
         uses: ./workflows/getNpmToken
         with:
           repository_path: ${{ github.workspace }}/target
+          npm_token: ${{ secrets.NPM_TOKEN }}
+          npm_token_for_akashic_extension: ${{ secrets.EXTENSION_NPM_TOKEN }}
       - name: Install ssh key
         uses: shimataro/ssh-key-action@v1
         with:

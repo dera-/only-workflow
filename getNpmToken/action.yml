@@ -4,9 +4,12 @@ inputs:
   repository_path:
     description: Path of target repository
     required: true
-env:
-  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-  EXTENSION_NPM_TOKEN: ${{ secrets.EXTENSION_NPM_TOKEN }}
+  npm_token:
+    description: Npm token
+    required: true
+  npm_token_for_akashic_extension:
+    description: akashic-extension's npm token
+    required: true
 runs:
   using: node12
   main: index.js

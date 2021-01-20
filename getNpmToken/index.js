@@ -7,9 +7,9 @@ try {
 	const name = packageJson["name"];
 	let token = "";
 	if (/^@akashic-extension\//.test(name)) {
-		token = process.env.EXTENSION_NPM_TOKEN;
+		token = core.getInput("npm_token_for_akashic_extension");
 	} else {
-		token = process.env.NPM_TOKEN;
+		token = core.getInput("npm_token");
 	}
 	core.setOutput("token", token);
 } catch (error) {
