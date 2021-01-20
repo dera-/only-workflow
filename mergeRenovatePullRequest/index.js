@@ -6,7 +6,7 @@ try {
 	const githubToken = core.getInput("github_token");
 	const octokit = github.getOctokit(githubToken);
 	octokit.pulls.list({
-        owner: 'dera-',
+        owner: 'akashic-games',
         repo: repositoryName,
     }).then(pr => { console.log(pr); });
 } catch (error) {
