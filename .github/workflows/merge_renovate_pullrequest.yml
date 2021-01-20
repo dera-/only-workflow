@@ -23,6 +23,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
       - run: npm install
+        working-directory: workflows
       - name: Merge renovate pullrequest
         id: renovate_pullrequest
         uses: ./workflows/mergeRenovatePullRequest
