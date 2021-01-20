@@ -4,11 +4,10 @@ const github = require("@actions/github");
 try {
 	const repositoryName = core.getInput("repository_name");
 	const octokit = github.getOctokit(myToken);
-	const pullRequests = await octokit.pulls.list({
+	octokit.pulls.list({
         owner: 'dera-',
         repo: repositoryName,
-    });
-	console.log(pullRequests);
+    }).then(pr => { console.log(pr); });
 } catch (error) {
 	core.setFailed(error.message);
 }
