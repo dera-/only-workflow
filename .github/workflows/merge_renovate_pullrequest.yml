@@ -27,4 +27,4 @@ jobs:
         id: renovate_pullrequest
         uses: ./workflows/mergeRenovatePullRequest
         with:
-          repository_path: ${{ github.event.inputs.git_repository }}
+          repository_name: ${{ github.event.inputs.git_repository }}
