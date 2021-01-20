@@ -1,0 +1,9 @@
+name: Merge renovate pull request
+description: Merge renovate pull request that pass test
+inputs:
+  repository_name:
+    description: Name of target repository
+    required: true
+runs:
+  using: node12
+  main: index.js

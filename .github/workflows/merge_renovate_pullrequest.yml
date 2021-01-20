@@ -1,0 +1,28 @@
+name: Merge renovate pullrequest
+
+on:
+  workflow_dispatch:
+    inputs:
+      git_repository:
+        description: Git repository
+        required: true
+
+env:
+  NODE_VERSION: 12
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout this repository
+        uses: actions/checkout@v2
+      - name: Setup node
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: npm install
+      - name: Merge renovate pullrequest
+        id: renovate_pullrequest
+        uses: ./workflows/mergeRevotePullRequest
+        with:
+          repository_path: ${{ github.event.inputs.git_repository }}
