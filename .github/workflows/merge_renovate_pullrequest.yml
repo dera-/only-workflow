@@ -23,6 +23,6 @@ jobs:
       - run: npm install
       - name: Merge renovate pullrequest
         id: renovate_pullrequest
-        uses: ./workflows/mergeRevotePullRequest
+        uses: ./mergeRevotePullRequest
         with:
           repository_path: ${{ github.event.inputs.git_repository }}
