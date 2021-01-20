@@ -4,6 +4,9 @@ inputs:
   repository_name:
     description: Name of target repository
     required: true
+  github_token:
+    description: Github token
+    required: true
 runs:
   using: node12
   main: index.js

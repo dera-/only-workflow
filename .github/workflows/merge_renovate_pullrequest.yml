@@ -29,3 +29,4 @@ jobs:
         uses: ./workflows/mergeRenovatePullRequest
         with:
           repository_name: ${{ github.event.inputs.git_repository }}
+          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
