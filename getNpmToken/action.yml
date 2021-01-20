@@ -1,0 +1,15 @@
+name: Get npm token
+description: Get npm token for the specified repository
+inputs:
+  repository_path:
+    description: Path of target repository
+    required: true
+runs:
+  using: node12
+  main: index.js
+  env:
+    NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    EXTENSION_NPM_TOKEN: ${{ secrets.EXTENSION_NPM_TOKEN }}
+outputs:
+  token:
+    description: Token for the specified repository

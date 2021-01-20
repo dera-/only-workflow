@@ -14,8 +14,8 @@ on:
         description: Target tag
         required: true
         default: latest
-      additional_tag:
-        description: Additional tag
+      additional_target_tag:
+        description: npm の publish 時に target_tag に加えて付与される tag である。利用例：akashic-engine v3 系のライブラリを publish する時に latest タグとは別に for_ae3x タグにも残したい場合。
         required: false
 
 env:
@@ -41,15 +41,20 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - run: npm install
         working-directory: workflows
-      # - name: Run test in target repository
-      #   run: |
-      #     npm install
-      #     npm test
-      #   working-directory: target
+      - name: Prepare publish
+        run: |
+          npm install
+          npm test
+        working-directory: target
+      - name: Get npm token
+        id: npm_token
+        uses: ./workflows/getNpmToken
+        with:
+          repository_path: ${{ github.workspace }}/target
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
         with:
-          token: ${{ secrets.NPM_TOKEN }}
+          token: ${{ steps.npm_token.outputs.token }}
           package: ./target/package.json
           tag: ${{ github.event.inputs.target_tag }}
           access: public
@@ -58,10 +63,10 @@ jobs:
         run: echo "::set-output name=content::$(cat ./package.json | tr -d '\n')"
         working-directory: target
       - name: Add dist tag
-        if: ${{ github.event.inputs.additional_tag }}
-        run: npm dist-tag add ${{ fromJson(steps.package_json.outputs.content).name }}@${{ fromJson(steps.package_json.outputs.content).version }} ${{ github.event.inputs.additional_tag }}
+        if: ${{ github.event.inputs.additional_target_tag }}
+        run: npm dist-tag add ${{ fromJson(steps.package_json.outputs.content).name }}@${{ fromJson(steps.package_json.outputs.content).version }} ${{ github.event.inputs.additional_target_tag }}
         env:
-          INPUT_TOKEN: ${{ secrets.NPM_TOKEN }}
+          INPUT_TOKEN: ${{ steps.npm_token.outputs.token }}
       - name: Generate release note
         id: release_note
         uses: ./workflows/generateReleaseNote
@@ -70,7 +75,7 @@ jobs:
       - name: Create release note
         uses: actions/create-release@master
         env:
-          # 他リポジトリに対して操作を行う場合secret.GITHUB_TOKENとは別にgithubトークンを利用する必要があるためsecret.GH_TOKENを用意
+          # 他リポジトリに対して操作を行う場合secret.GITHUB_TOKENとは別にgithubトークンを利用する必要があるためsecret.PERSONAL_ACCESS_TOKENを用意
           GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
           tag_name: ${{ steps.release_note.outputs.version }}

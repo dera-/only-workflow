@@ -4,10 +4,10 @@ on:
   workflow_dispatch:
     inputs:
       git_repository:
-        description: Git repository of Monorepo
+        description: Git repository of monorepo using lerna
         required: true
       next_version:
-        description: patch, minor, major, prelease
+        description: 通常時は patch, minor, major, prelease のどれかを指定します。更新対象が無くても publish したい場合は force-patch-all を、Github 上の package.json に記載されているバージョンのまま publish したい場合は from-package を指定します。
         required: true
       target_branch:
         description: Target branch
@@ -32,7 +32,7 @@ jobs:
       - name: Checkout target repository
         uses: actions/checkout@v2
         with:
-          repository: ${{ github.actor }}/${{ github.event.inputs.git_repository }}
+          repository: dera-/${{ github.event.inputs.git_repository }}
           ref: ${{ github.event.inputs.target_branch }}
           path: target
       - name: Setup node
@@ -41,42 +41,15 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - run: npm install
         working-directory: workflows
-      - name: Npm Install
-        run: |
-          npm install --no-package-lock
-          git checkout .
-        working-directory: target
-      - name: Get changed modlues
-        id: changed_modules
-        run: echo "::set-output name=count::$(./node_modules/.bin/lerna changed | wc -l | tr -d '\n')"
-        working-directory: target
-      - name: check valiables
-        run: |
-          ./node_modules/.bin/lerna list
-          ./node_modules/.bin/lerna diff
-          ./node_modules/.bin/lerna changed
-          echo ${{ github.event.inputs.next_version }}
-          echo ${{ steps.changed_modules.outputs.count }}
-          echo ${{ github.actor }}
-        working-directory: target
-      - name: Stop to publish 
-        if: github.event.inputs.next_version != 'from-package' && github.event.inputs.next_version != 'force-patch-all' && steps.changed_modules.outputs.count == '0'
-        run: exit 0
-      - name: Read package.json
-        id: package_json
-        run: echo "::set-output name=content::$(cat ./package.json | tr -d '\n')"
+      - name: Install node modules
+        run: npm install --no-package-lock
         working-directory: target
       - name: Get npm token
         id: npm_token
-        run: |
-          set +x
-          if [[ ${{ fromJson(steps.package_json.outputs.content).name }} =~ @akashic-extension/.+ ]]; then
-            echo "::set-output name=value::${{ secrets.EXTENSION_NPM_TOKEN }}"
-          else
-            echo "::set-output name=value::${{ secrets.NPM_TOKEN }}"
-          fi
-          set -x
-      - name: Install SSH key
+        uses: ./workflows/getNpmToken
+        with:
+          repository_path: ${{ github.workspace }}/target
+      - name: Install ssh key
         uses: shimataro/ssh-key-action@v1
         with:
           private-key: ${{ secrets.REPOSITORY_DEPLOY_KEY }}
@@ -84,7 +57,7 @@ jobs:
         run: |
           git config user.name "dera-"
           git config user.email "alchemy.and.fairy@gmail.com"
-          git remote set-url origin git@github.com:${{ github.actor }}/${{ github.event.inputs.git_repository }}.git
+          git remote set-url origin git@github.com:dera-/${{ github.event.inputs.git_repository }}.git
           npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
           if [[ ${{ github.event.inputs.next_version }} = "from-package" ]]; then
             ./node_modules/.bin/lerna publish from-package --yes
@@ -92,6 +65,6 @@ jobs:
             npm run publish:${{ github.event.inputs.next_version }}
           fi
         env:
-          NPM_TOKEN: ${{ steps.npm_token.outputs.value }}
+          NPM_TOKEN: ${{ steps.npm_token.outputs.token }}
           GITHUB_AUTH: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         working-directory: target
