@@ -4,15 +4,23 @@ inputs:
   repository_path:
     description: Path of target repository
     required: true
-  npm_token:
-    description: Npm token
-    required: true
-  npm_token_for_akashic_extension:
-    description: akashic-extension's npm token
-    required: true
 runs:
-  using: node12
-  main: index.js
+  using: "composite"
+  steps:
+    - id: package_json
+      run: echo "::set-output name=content::$(cat ./package.json | tr -d '\n')"
+      working-directory: ${{ inputs.git_repository }}
+    - id: npm_token
+      run: |
+        set +x
+        if [[ ${{ fromJson(steps.package_json.outputs.content).name }} =~ @akashic-extension/.+ ]]; then
+          echo "::set-output name=value::${{ secrets.EXTENSION_NPM_TOKEN }}"
+        else
+          echo "::set-output name=value::${{ secrets.NPM_TOKEN }}"
+        fi
+        set -x
+      shell: bash
 outputs:
   token:
-    description: Token for the specified repository
+    description: "Npm token for the specified repository"
+    value: ${{ steps.npm_token.outputs.value }}
