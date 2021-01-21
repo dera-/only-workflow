@@ -51,7 +51,6 @@ jobs:
         uses: ./workflows/getNpmToken
         with:
           repository_path: ${{ github.workspace }}/target
-          secrets: ${{ secrets }}
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           EXTENSION_NPM_TOKEN: ${{ secrets.EXTENSION_NPM_TOKEN }}
