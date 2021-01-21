@@ -4,19 +4,23 @@ inputs:
   repository_path:
     description: Path of target repository
     required: true
+  secrets:
+    description: Path of target repository
+    required: true
 runs:
   using: "composite"
   steps:
     - id: package_json
       run: echo "::set-output name=content::$(cat ./package.json | tr -d '\n')"
       working-directory: ${{ inputs.git_repository }}
+      shell: bash
     - id: npm_token
       run: |
         set +x
         if [[ ${{ fromJson(steps.package_json.outputs.content).name }} =~ @akashic-extension/.+ ]]; then
-          echo "::set-output name=value::${{ secrets.EXTENSION_NPM_TOKEN }}"
+          echo "::set-output name=value::${{ inputs.secrets.EXTENSION_NPM_TOKEN }}"
         else
-          echo "::set-output name=value::${{ secrets.NPM_TOKEN }}"
+          echo "::set-output name=value::${{ inputs.secrets.NPM_TOKEN }}"
         fi
         set -x
       shell: bash

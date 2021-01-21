@@ -51,6 +51,7 @@ jobs:
         uses: ./workflows/getNpmToken
         with:
           repository_path: ${{ github.workspace }}/target
+          secrets: ${{ secrets }}
       - name: Install ssh key
         uses: shimataro/ssh-key-action@v1
         with:
