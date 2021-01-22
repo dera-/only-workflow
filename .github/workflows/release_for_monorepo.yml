@@ -42,7 +42,7 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ env.NODE_VERSION }}
-          registry-url: "https://registry.npmjs.org"
+          registry-url: 'https://registry.npmjs.org'
       - run: npm install
         working-directory: workflows
       - run: npm install --no-package-lock # package-lock.json の diff が発生する可能性があるため --no-package-lock を付与
