@@ -57,7 +57,7 @@ jobs:
           EXTENSION_NPM_TOKEN: ${{ secrets.EXTENSION_NPM_TOKEN }}
       - name: Publish
         run: |
-          cat $NPM_CONFIG_USERCONFIG
+          cd target
           git config user.name ${{ env.GIT_USER_NAME }}
           git config user.email ${{ env.GIT_USER_EMAIL }}
           if [[ ${{ github.event.inputs.next_version }} = "from-package" ]]; then
@@ -66,7 +66,5 @@ jobs:
             npm run publish:${{ github.event.inputs.next_version }}
           fi
         env:
-          NPM_TOKEN: ${{ steps.npm_token.outputs.token }}
           NODE_AUTH_TOKEN: ${{ secrets.npm_token.outputs.token }}
           GITHUB_AUTH: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-        working-directory: target
