@@ -57,6 +57,7 @@ jobs:
           EXTENSION_NPM_TOKEN: ${{ secrets.EXTENSION_NPM_TOKEN }}
       - name: Publish
         run: |
+          cat $NPM_CONFIG_USERCONFIG
           git config user.name ${{ env.GIT_USER_NAME }}
           git config user.email ${{ env.GIT_USER_EMAIL }}
           if [[ ${{ github.event.inputs.next_version }} = "from-package" ]]; then
