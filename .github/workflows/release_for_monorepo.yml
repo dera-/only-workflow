@@ -42,28 +42,23 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ env.NODE_VERSION }}
+          registry-url: "https://registry.npmjs.org"
       - run: npm install
         working-directory: workflows
-      - name: Install node modules
-        run: npm install --no-package-lock
+      - run: npm install --no-package-lock # package-lock.json の diff が発生する可能性があるため --no-package-lock を付与
         working-directory: target
       - name: Get npm token
         id: npm_token
         uses: ./workflows/getNpmToken
         with:
-          repository_path: ${{ github.workspace }}/target
+          target_dir: target
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           EXTENSION_NPM_TOKEN: ${{ secrets.EXTENSION_NPM_TOKEN }}
-      # - name: Install ssh key
-      #   uses: shimataro/ssh-key-action@v1
-      #   with:
-      #     private-key: ${{ secrets.REPOSITORY_DEPLOY_KEY }}
       - name: Publish
         run: |
           git config user.name ${{ env.GIT_USER_NAME }}
           git config user.email ${{ env.GIT_USER_EMAIL }}
-          npm config set //registry.npmjs.org/:_authToken=$NPM_TOKEN
           if [[ ${{ github.event.inputs.next_version }} = "from-package" ]]; then
             ./node_modules/.bin/lerna publish from-package --yes
           else
@@ -71,5 +66,6 @@ jobs:
           fi
         env:
           NPM_TOKEN: ${{ steps.npm_token.outputs.token }}
+          NODE_AUTH_TOKEN: ${{ secrets.npm_token.outputs.token }}
           GITHUB_AUTH: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         working-directory: target
