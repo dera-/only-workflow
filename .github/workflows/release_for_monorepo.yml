@@ -42,10 +42,9 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ env.NODE_VERSION }}
-          registry-url: 'https://registry.npmjs.org'
       - run: npm install
         working-directory: workflows
-      - run: npm install --no-package-lock # package-lock.json の diff が発生する可能性があるため --no-package-lock を付与
+      - run: npm ci
         working-directory: target
       - name: Get npm token
         id: npm_token
@@ -55,16 +54,17 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           EXTENSION_NPM_TOKEN: ${{ secrets.EXTENSION_NPM_TOKEN }}
+      - name: Set npm token
+        run: npm config set //registry.npmjs.org/:_authToken=${{ steps.npm_token.outputs.token }}
       - name: Publish
         run: |
-          cd target
-          git config user.name ${{ env.GIT_USER_NAME }}
-          git config user.email ${{ env.GIT_USER_EMAIL }}
+          git config user.name $GIT_USER_NAME
+          git config user.email $GIT_USER_EMAIL
           if [[ ${{ github.event.inputs.next_version }} = "from-package" ]]; then
             ./node_modules/.bin/lerna publish from-package --yes
           else
             npm run publish:${{ github.event.inputs.next_version }}
           fi
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.npm_token.outputs.token }}
           GITHUB_AUTH: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        working-directory: target
