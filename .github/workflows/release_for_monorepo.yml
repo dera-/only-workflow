@@ -54,8 +54,14 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           EXTENSION_NPM_TOKEN: ${{ secrets.EXTENSION_NPM_TOKEN }}
-      - name: Set npm token
-        run: npm config set //registry.npmjs.org/:_authToken=${{ steps.npm_token.outputs.token }}
+      - name: Setup node to publish target
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: https://registry.npmjs.org
+        working-directory: target
+      # - name: Set npm token
+      #   run: npm config set //registry.npmjs.org/:_authToken=${{ steps.npm_token.outputs.token }}
       - name: Publish
         run: |
           git config user.name $GIT_USER_NAME
@@ -67,4 +73,5 @@ jobs:
           fi
         env:
           GITHUB_AUTH: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ steps.npm_token.outputs.token }}
         working-directory: target
