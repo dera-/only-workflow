@@ -34,10 +34,14 @@ jobs:
       - name: Checkout target repository
         uses: actions/checkout@v2
         with:
-          repository: dera-/${{ github.event.inputs.git_repository }}
-          ref: ${{ github.event.inputs.target_branch }}
+          repository: akashic-games/${{ env.GIT_REPOSITORY }}
+          ref: ${{ env.TARGET_BRANCH }}
           path: target
-          token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          token: ${{ env.GH_TOKEN }}
+        env:
+          GIT_REPOSITORY: ${{ github.event.inputs.git_repository }}
+          TARGET_BRANCH: ${{ github.event.inputs.target_branch }}
+          GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }} # env.GITHUB_TOKENは既に存在するため、別の変数名にする
       - name: Setup node
         uses: actions/setup-node@v2
         with:
