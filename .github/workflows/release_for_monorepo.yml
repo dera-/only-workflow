@@ -59,7 +59,6 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: https://registry.npmjs.org
-        working-directory: target
       # - name: Set npm token
       #   run: npm config set //registry.npmjs.org/:_authToken=${{ steps.npm_token.outputs.token }}
       - name: Publish
