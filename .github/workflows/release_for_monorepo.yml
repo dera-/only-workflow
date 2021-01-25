@@ -34,7 +34,7 @@ jobs:
       - name: Checkout target repository
         uses: actions/checkout@v2
         with:
-          repository: akashic-games/${{ env.GIT_REPOSITORY }}
+          repository: dera-/${{ env.GIT_REPOSITORY }}
           ref: ${{ env.TARGET_BRANCH }}
           path: target
           token: ${{ env.GH_TOKEN }}
