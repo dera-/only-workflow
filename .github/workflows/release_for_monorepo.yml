@@ -46,25 +46,23 @@ jobs:
         working-directory: workflows
       - run: npm ci
         working-directory: target
-      - name: Get npm token
+      - name: Choose npm token
         id: npm_token
-        uses: ./workflows/getNpmToken
+        uses: ./workflows/chooseNpmToken
         with:
           target_dir: target
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          EXTENSION_NPM_TOKEN: ${{ secrets.EXTENSION_NPM_TOKEN }}
+          npm_token_for_akashic: ${{ secrets.NPM_TOKEN }}
+          npm_token_for_akashic_extension: ${{ secrets.EXTENSION_NPM_TOKEN }}
+      - name: Set git user infomartion
+        run: |
+          git config user.name $GIT_USER_NAME
+          git config user.email $GIT_USER_EMAIL
       - name: Setup node to publish target
         uses: actions/setup-node@v2
         with:
           node-version: ${{ env.NODE_VERSION }}
-          registry-url: https://registry.npmjs.org
-      # - name: Set npm token
-      #   run: npm config set //registry.npmjs.org/:_authToken=${{ steps.npm_token.outputs.token }}
       - name: Publish
         run: |
-          git config user.name $GIT_USER_NAME
-          git config user.email $GIT_USER_EMAIL
           if [[ ${{ github.event.inputs.next_version }} = "from-package" ]]; then
             ./node_modules/.bin/lerna publish from-package --yes
           else

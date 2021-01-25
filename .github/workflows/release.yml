@@ -46,12 +46,12 @@ jobs:
           npm install
           npm test
         working-directory: target
-      - name: Get npm token
+      - name: Choose npm token
         id: npm_token
-        uses: ./workflows/getNpmToken
+        uses: ./workflows/chooseNpmToken
         with:
           repository_path: ${{ github.workspace }}/target
-          npm_token: ${{ secrets.NPM_TOKEN }}
+          npm_token_for_akashic: ${{ secrets.NPM_TOKEN }}
           npm_token_for_akashic_extension: ${{ secrets.EXTENSION_NPM_TOKEN }}
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
