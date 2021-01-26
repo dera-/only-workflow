@@ -88,9 +88,6 @@ jobs:
           repository_path: ${{ github.workspace }}/target
       - name: Create release note
         uses: actions/create-release@master
-        env:
-          # 他リポジトリに対して操作を行う場合secret.GITHUB_TOKENとは別にgithubトークンを利用する必要があるためsecret.PERSONAL_ACCESS_TOKENを用意
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
         with:
           tag_name: ${{ env.RELEASE_VERSION }}
           release_name: Release ${{ env.RELEASE_VERSION }}
@@ -101,6 +98,8 @@ jobs:
           owner: dera-
           repo: ${{ env.GIT_REPOSITORY }}
         env:
+          # 他リポジトリに対して操作を行う場合secret.GITHUB_TOKENとは別にgithubトークンを利用する必要があるためsecret.GH_TOKENを用意
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           RELEASE_VERSION: ${{ steps.release_note.outputs.version }}
           RELEASE_CONTENT: ${{ steps.release_note.outputs.body }}
           GIT_REPOSITORY: ${{ github.event.inputs.git_repository }}
