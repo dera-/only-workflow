@@ -20,8 +20,8 @@ on:
 
 env:
   NODE_VERSION: 12
-  GIT_USER_NAME: dera-
-  GIT_USER_EMAIL: alchemy.and.fairy@gmail.com
+  GIT_USER_NAME: jenkins
+  GIT_USER_EMAIL: akashic@dwango.co.jp
 
 jobs:
   release:
@@ -37,11 +37,12 @@ jobs:
           repository: dera-/${{ env.GIT_REPOSITORY }}
           ref: ${{ env.TARGET_BRANCH }}
           path: target
-          token: ${{ env.GH_TOKEN }}
+          token: ${{ env.PERSONAL_ACCESS_TOKEN }}
         env:
           GIT_REPOSITORY: ${{ github.event.inputs.git_repository }}
           TARGET_BRANCH: ${{ github.event.inputs.target_branch }}
-          GH_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }} # env.GITHUB_TOKENは既に存在するため、別の変数名にする
+          # 他リポジトリに対して操作を行う場合secret.GITHUB_TOKENとは別にgithubトークンを利用する必要がある
+          PERSONAL_ACCESS_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       - name: Setup node
         uses: actions/setup-node@v2
         with:
@@ -56,26 +57,25 @@ jobs:
         uses: ./workflows/chooseNpmToken
         with:
           target_dir: target
-          npm_token_for_akashic: ${{ secrets.NPM_TOKEN }}
-          npm_token_for_akashic_extension: ${{ secrets.EXTENSION_NPM_TOKEN }}
+          npm_token_for_akashic: ${{ env.NPM_TOKEN }}
+          npm_token_for_akashic_extension: ${{ env.EXTENSION_NPM_TOKEN }}
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          EXTENSION_NPM_TOKEN: ${{ secrets.EXTENSION_NPM_TOKEN }}
       - name: Set git user infomartion
         run: |
           git config user.name $GIT_USER_NAME
           git config user.email $GIT_USER_EMAIL
         working-directory: target
-      # - name: Setup node to publish target
-      #   uses: actions/setup-node@v2
-      #   with:
-      #     node-version: ${{ env.NODE_VERSION }}
-      #     registry-url: https://registry.npmjs.org
       - name: Publish
         run: |
-          if [[ ${{ github.event.inputs.next_version }} = "from-package" ]]; then
+          if [[ $NEXT_VERSION = "from-package" ]]; then
             ./node_modules/.bin/lerna publish from-package --yes
           else
-            npm run publish:${{ github.event.inputs.next_version }}
+            npm run publish:$NEXT_VERSION
           fi
         env:
           GITHUB_AUTH: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           NODE_AUTH_TOKEN: ${{ steps.npm_token.outputs.token }}
+          NEXT_VERSION: ${{ github.event.inputs.next_version }}
         working-directory: target
