@@ -91,7 +91,7 @@ jobs:
         with:
           tag_name: ${{ env.RELEASE_VERSION }}
           release_name: Release ${{ env.RELEASE_VERSION }}
-          body: ${{ env.RELEASE_CONTENT }}
+          body: ${{ env.RELEASE_BODY }}
           draft: false
           prerelease: false
           commitish: ${{ env.TARGET_BRANCH }}
@@ -101,6 +101,6 @@ jobs:
           # 他リポジトリに対して操作を行う場合secret.GITHUB_TOKENとは別にgithubトークンを利用する必要があるためsecret.GH_TOKENを用意
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           RELEASE_VERSION: ${{ steps.release_note.outputs.version }}
-          RELEASE_CONTENT: ${{ steps.release_note.outputs.body }}
+          RELEASE_BODY: ${{ steps.release_note.outputs.body }}
           GIT_REPOSITORY: ${{ github.event.inputs.git_repository }}
           TARGET_BRANCH: ${{ github.event.inputs.target_branch }}

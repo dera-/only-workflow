@@ -70,7 +70,7 @@ jobs:
       - name: Publish
         run: |
           if [[ $NEXT_VERSION = "from-package" ]]; then
-            ./node_modules/.bin/lerna publish from-package --yes
+            npx lerna publish from-package --yes
           else
             npm run publish:$NEXT_VERSION
           fi
