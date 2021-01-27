@@ -99,7 +99,7 @@ jobs:
           repo: ${{ env.GIT_REPOSITORY }}
         env:
           # 他リポジトリに対して操作を行う場合secret.GITHUB_TOKENとは別にgithubトークンを利用する必要があるためsecret.GH_TOKENを用意
-          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           RELEASE_VERSION: ${{ steps.release_note.outputs.version }}
           RELEASE_BODY: ${{ steps.release_note.outputs.body }}
           GIT_REPOSITORY: ${{ github.event.inputs.git_repository }}
