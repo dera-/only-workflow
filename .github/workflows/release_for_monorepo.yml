@@ -24,7 +24,7 @@ env:
   GIT_USER_EMAIL: akashic@dwango.co.jp
 
 jobs:
-  release:
+  release_monorepo:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout this repository

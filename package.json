@@ -5,8 +5,12 @@
   "private": true,
   "main": "index.js",
   "scripts": {
-    "test": "npm run test:generate-release-note",
-    "test:generate-release-note": "node ./generateReleaseNote/generateReleaseNote.test.js"
+    "test": "run-s test:*",
+    "test:generate-release-note": "node ./generateReleaseNote/generateReleaseNote.test.js",
+    "local-test": "run-s local-test:*",
+    "local-test:test": "sudo act -j test --secret-file test/.secrets",
+    "local-test:release": "sudo act -j release_publish -e test/release.json --secret-file test/.secrets",
+    "local-test:release_for_monorepo": "sudo act -j release_monorepo -e test/release_for_monorepo.json --secret-file test/.secrets"
   },
   "repository": {
     "type": "git",
@@ -21,6 +25,7 @@
   "homepage": "https://github.com/dera-/only-workflow#readme",
   "devDependencies": {
     "@actions/core": "^1.2.6",
-    "@actions/github": "^4.0.0"
+    "@actions/github": "^4.0.0",
+    "npm-run-all": "^4.1.5"
   }
 }

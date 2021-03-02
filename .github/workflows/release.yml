@@ -22,7 +22,7 @@ env:
   NODE_VERSION: 12
 
 jobs:
-  release:
+  release_publish:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout this repository
@@ -49,9 +49,12 @@ jobs:
           npm install
           npm test
         working-directory: target
+      - name: Check dir
+        run: pwd && ls -la && echo ${{ github.workspace }}
+        working-directory: workflows
       - name: Choose npm token
         id: npm_token
-        uses: ./workflows/chooseNpmToken
+        uses: dera-/action-sample@master/chooseNpmToken
         with:
           target_dir: target
           npm_token_for_akashic: ${{ env.NPM_TOKEN }}
@@ -59,11 +62,12 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           EXTENSION_NPM_TOKEN: ${{ secrets.EXTENSION_NPM_TOKEN }}
+        working-directory: workflows
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
         with:
           token: ${{ env.NPM_TOKEN }}
-          package: ./target/package.json
+          package: ${{ github.workspace }}/target/package.json
           tag: ${{ env.TARGET_TAG }}
           access: public
         env:
@@ -71,7 +75,7 @@ jobs:
           TARGET_TAG: ${{ github.event.inputs.target_tag }}
       - name: Read package.json
         id: package_json
-        run: echo "::set-output name=content::$(cat ./package.json | tr -d '\n')"
+        run: echo "::set-output name=content::$(cat ${{ github.workspace }}/package.json | tr -d '\n')"
         working-directory: target
       - name: Add dist tag
         if: ${{ env.ADDITIONAL_TARGET_TAG }}
@@ -83,7 +87,7 @@ jobs:
           ADDITIONAL_TARGET_TAG: ${{ github.event.inputs.additional_target_tag }}
       - name: Generate release note
         id: release_note
-        uses: ./workflows/generateReleaseNote
+        uses: dera-/action-sample@master/generateReleaseNote
         with:
           repository_path: ${{ github.workspace }}/target
       - name: Create release note
