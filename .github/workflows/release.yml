@@ -54,7 +54,7 @@ jobs:
         working-directory: workflows
       - name: Choose npm token
         id: npm_token
-        uses: dera-/action-sample@master/chooseNpmToken
+        uses: dera-/action-sample/chooseNpmToken@master
         with:
           target_dir: target
           npm_token_for_akashic: ${{ env.NPM_TOKEN }}
@@ -86,7 +86,7 @@ jobs:
           ADDITIONAL_TARGET_TAG: ${{ github.event.inputs.additional_target_tag }}
       - name: Generate release note
         id: release_note
-        uses: dera-/action-sample@master/generateReleaseNote
+        uses: dera-/action-sample/generateReleaseNote@master
         with:
           repository_path: ${{ github.workspace }}/target
       - name: Create release note
