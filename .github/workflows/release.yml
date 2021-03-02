@@ -62,7 +62,6 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           EXTENSION_NPM_TOKEN: ${{ secrets.EXTENSION_NPM_TOKEN }}
-        working-directory: workflows
       - name: Publish
         uses: JS-DevTools/npm-publish@v1
         with:
