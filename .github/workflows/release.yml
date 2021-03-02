@@ -76,14 +76,14 @@ jobs:
         id: package_json
         run: echo "::set-output name=content::$(cat ${{ github.workspace }}/package.json | tr -d '\n')"
         working-directory: target
-      - name: Add dist tag
-        if: ${{ env.ADDITIONAL_TARGET_TAG }}
-        run: npm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $ADDITIONAL_TARGET_TAG
-        env:
-          INPUT_TOKEN: ${{ steps.npm_token.outputs.token }}
-          PACKAGE_NAME: ${{ fromJson(steps.package_json.outputs.content).name }}
-          PACKAGE_VERSION: ${{ fromJson(steps.package_json.outputs.content).version }}
-          ADDITIONAL_TARGET_TAG: ${{ github.event.inputs.additional_target_tag }}
+      # - name: Add dist tag
+      #   if: ${{ env.ADDITIONAL_TARGET_TAG }}
+      #   run: npm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $ADDITIONAL_TARGET_TAG
+      #   env:
+      #     INPUT_TOKEN: ${{ steps.npm_token.outputs.token }}
+      #     PACKAGE_NAME: ${{ fromJson(steps.package_json.outputs.content).name }}
+      #     PACKAGE_VERSION: ${{ fromJson(steps.package_json.outputs.content).version }}
+      #     ADDITIONAL_TARGET_TAG: ${{ github.event.inputs.additional_target_tag }}
       - name: Generate release note
         id: release_note
         uses: dera-/action-sample/generateReleaseNote@master
