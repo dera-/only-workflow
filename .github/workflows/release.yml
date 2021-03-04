@@ -62,48 +62,57 @@ jobs:
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           EXTENSION_NPM_TOKEN: ${{ secrets.EXTENSION_NPM_TOKEN }}
-      - name: Publish
-        uses: JS-DevTools/npm-publish@v1
+      - name: Publish and Release
+        uses: dera-/action-sample/release@master
         with:
-          token: ${{ env.NPM_TOKEN }}
-          package: ${{ github.workspace }}/target/package.json
-          tag: ${{ env.TARGET_TAG }}
-          access: public
-        env:
-          NPM_TOKEN: ${{ steps.npm_token.outputs.token }}
-          TARGET_TAG: ${{ github.event.inputs.target_tag }}
-      - name: Read package.json
-        id: package_json
-        run: echo "::set-output name=content::$(cat ${{ github.workspace }}/package.json | tr -d '\n')"
-        working-directory: target
-      # - name: Add dist tag
-      #   if: ${{ env.ADDITIONAL_TARGET_TAG }}
-      #   run: npm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $ADDITIONAL_TARGET_TAG
+          git_repository: ${{ github.event.inputs.git_repository }}
+          target_branch: ${{ github.event.inputs.target_branch }}
+          target_npm_tag: ${{ github.event.inputs.target_tag }}
+          target_dir_path: ${{ github.workspace }}/target
+          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+          npm_token: ${{ steps.npm_token.outputs.token }}
+      # - name: Publish
+      #   uses: JS-DevTools/npm-publish@v1
+      #   with:
+      #     token: ${{ env.NPM_TOKEN }}
+      #     package: ${{ github.workspace }}/target/package.json
+      #     tag: ${{ env.TARGET_TAG }}
+      #     access: public
       #   env:
-      #     INPUT_TOKEN: ${{ steps.npm_token.outputs.token }}
-      #     PACKAGE_NAME: ${{ fromJson(steps.package_json.outputs.content).name }}
-      #     PACKAGE_VERSION: ${{ fromJson(steps.package_json.outputs.content).version }}
-      #     ADDITIONAL_TARGET_TAG: ${{ github.event.inputs.additional_target_tag }}
-      - name: Generate release note
-        id: release_note
-        uses: dera-/action-sample/generateReleaseNote@master
-        with:
-          repository_path: ${{ github.workspace }}/target
-      - name: Create release note
-        uses: actions/create-release@master
-        with:
-          tag_name: ${{ env.RELEASE_VERSION }}
-          release_name: Release ${{ env.RELEASE_VERSION }}
-          body: ${{ env.RELEASE_BODY }}
-          draft: false
-          prerelease: false
-          commitish: ${{ env.TARGET_BRANCH }}
-          owner: dera-
-          repo: ${{ env.GIT_REPOSITORY }}
-        env:
-          # 他リポジトリに対して操作を行う場合secret.GITHUB_TOKENとは別にgithubトークンを利用する必要があるためsecret.GH_TOKENを用意
-          GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          RELEASE_VERSION: ${{ steps.release_note.outputs.version }}
-          RELEASE_BODY: ${{ steps.release_note.outputs.body }}
-          GIT_REPOSITORY: ${{ github.event.inputs.git_repository }}
-          TARGET_BRANCH: ${{ github.event.inputs.target_branch }}
+      #     NPM_TOKEN: ${{ steps.npm_token.outputs.token }}
+      #     TARGET_TAG: ${{ github.event.inputs.target_tag }}
+      # - name: Read package.json
+      #   id: package_json
+      #   run: echo "::set-output name=content::$(cat ${{ github.workspace }}/package.json | tr -d '\n')"
+      #   working-directory: target
+      # # - name: Add dist tag
+      # #   if: ${{ env.ADDITIONAL_TARGET_TAG }}
+      # #   run: npm dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $ADDITIONAL_TARGET_TAG
+      # #   env:
+      # #     INPUT_TOKEN: ${{ steps.npm_token.outputs.token }}
+      # #     PACKAGE_NAME: ${{ fromJson(steps.package_json.outputs.content).name }}
+      # #     PACKAGE_VERSION: ${{ fromJson(steps.package_json.outputs.content).version }}
+      # #     ADDITIONAL_TARGET_TAG: ${{ github.event.inputs.additional_target_tag }}
+      # - name: Generate release note
+      #   id: release_note
+      #   uses: dera-/action-sample/generateReleaseNote@master
+      #   with:
+      #     repository_path: ${{ github.workspace }}/target
+      # - name: Create release note
+      #   uses: actions/create-release@master
+      #   with:
+      #     tag_name: ${{ env.RELEASE_VERSION }}
+      #     release_name: Release ${{ env.RELEASE_VERSION }}
+      #     body: ${{ env.RELEASE_BODY }}
+      #     draft: false
+      #     prerelease: false
+      #     commitish: ${{ env.TARGET_BRANCH }}
+      #     owner: dera-
+      #     repo: ${{ env.GIT_REPOSITORY }}
+      #   env:
+      #     # 他リポジトリに対して操作を行う場合secret.GITHUB_TOKENとは別にgithubトークンを利用する必要があるためsecret.GH_TOKENを用意
+      #     GITHUB_TOKEN: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+      #     RELEASE_VERSION: ${{ steps.release_note.outputs.version }}
+      #     RELEASE_BODY: ${{ steps.release_note.outputs.body }}
+      #     GIT_REPOSITORY: ${{ github.event.inputs.git_repository }}
+      #     TARGET_BRANCH: ${{ github.event.inputs.target_branch }}
