@@ -65,10 +65,6 @@ jobs:
       - name: Publish and Release
         uses: dera-/action-sample/release@master
         with:
-          git_repository: ${{ github.event.inputs.git_repository }}
-          target_branch: ${{ github.event.inputs.target_branch }}
-          target_npm_tag: ${{ github.event.inputs.target_tag }}
-          target_dir_path: ${{ github.workspace }}/target
           github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           npm_token: ${{ steps.npm_token.outputs.token }}
       # - name: Publish
